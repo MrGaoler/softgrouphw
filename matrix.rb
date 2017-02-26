@@ -1,22 +1,20 @@
 class PrimeNumbers
-  def prime?(n)
-    @num = [nil, nil, *2..n]
-    (2..Math.sqrt(n)).each do |i|
-    (i**2..n).step(i){|m| @num[m] = nil} if @num[i]
-    end
-  output
+  def is_prime?(num)
+    return false if num <= 1
+    Math.sqrt(num).to_i.downto(2).each { |i| return false if num % i == 0 }
   end
 
-  def output
-    (@num.size - 6).times do
-    p @num.push(@num.shift).compact
-  end
-
+  def output(max_value)
+    prime_numbers = (0..max_value).select { |num| is_prime?(num) }
+    prime_numbers.count.times do |i|
+      string = (prime_numbers[i...prime_numbers.count] + prime_numbers[0...i])
+      string.each do |i|
+        print "#{i} #{',' unless i == string.last} "
+      end
+      puts
     end
-
+ end
 end
-lol = PrimeNumbers.new
-lol.prime?(10)
 
-# @num = @num.compact
-# p @num.push(5)
+lol = PrimeNumbers.new
+lol.output(7)

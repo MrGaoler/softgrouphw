@@ -1,5 +1,3 @@
-class String
-
   def valid? (string = self.split(//), znach = true)
     return znach if string.empty?
     return false if !( string.count % 2 ).zero? || !znach
