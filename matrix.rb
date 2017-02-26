@@ -1,12 +1,22 @@
+class PrimeNumbers
+  def prime?(n)
+    @num = [nil, nil, *2..n]
+    (2..Math.sqrt(n)).each do |i|
+    (i**2..n).step(i){|m| @num[m] = nil} if @num[i]
+    end
+  output
+  end
 
-def eratosthenes(n)
-numbs = Array.[](nil, nil, *2..n)
-(2..Math.sqrt(n)).each do |i|
-(i**2..n).step(i){|m| numbs[m] = nil} if numbs[i]
+  def output
+    (@num.size - 6).times do
+    p @num.push(@num.shift).compact
+  end
+
+    end
 
 end
-numbs.compact
-end
- numb = Array.new(4) { Array.new(numbs)}
+lol = PrimeNumbers.new
+lol.prime?(10)
 
-p eratosthenes(10)
+# @num = @num.compact
+# p @num.push(5)
