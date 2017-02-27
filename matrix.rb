@@ -13,8 +13,7 @@ class PrimeNumbers
       end
       puts
     end
- end
-end
-
+  end
+  end
 lol = PrimeNumbers.new
 lol.output(7)
