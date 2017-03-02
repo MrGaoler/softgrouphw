@@ -2,27 +2,28 @@ require 'csv'
 require 'date'
 
 class FileReader
-  attr_reader :path
-
-  def initialize(path)
+  def initialize(month, path)
+    @month = month
     @path = path
   end
 
   def process
-    @weth = []
-    CSV.foreach(@path, converters: :numeric) do |row|
-      puts row.inspect
-      @weth << row[1]
-    end
+    moncalc = CSV.read(@path).map { |el| [el.first.split('.').last, el.last] }
+    moncalc.select! { |el| el.first == @month }.map! { |el| [el.last].join }
+    @result = 0
+    moncalc.each { |a| @result += a.to_i }
+    @result /= moncalc.size.to_f
     output
   end
 
   def output
-    a = @weth.inject { |sum, n| sum + n }
-    puts 'Average temperature weather is'
-    p a
+    p "The average temperature in #{Date::MONTHNAMES[@month.to_i]} is #{@result.round(1)}"
+    p '=========================================='
   end
 end
 
-reader = FileReader.new('task.csv')
+p 'Input month number'
+month = gets.chomp
+p '=========================================='
+reader = FileReader.new(month, 'task.csv')
 reader.process
