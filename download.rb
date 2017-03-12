@@ -21,4 +21,4 @@ class Image
   end
 end
 
-Image.download('http://www.sunhome.ru/i/common/logo.gif')
+Image.download('http://www.planwallpaper.com/static/images/sw-worldbuilder-main3.jpg')
