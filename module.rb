@@ -1,42 +1,56 @@
 module Notification
-  def log(_path); end
+  def self.log(_path); end
 
-  def send_message(type, recepient)
-    p "#{type} was sent to #{recepient}"
+  def add_to_log(path, recepient)
+    File.open(path, 'a+') { |file| file.write("\nInvalid data: #{recepient}") }
   end
 end
-
+module Send_message
+  def send_message(type, recepient)
+    p "Sending #{type} to #{recepient}"
+    end
+  end
 class Email
   include Notification
-  def email_message(recepient)
+  include Send_message
+  def send_message(recepient)
     if recepient =~ /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-      send_message
+      super('Email', recepient)
     else
+      add_to_log(recepient)
       raise ArgumentError, 'Invalid E-mail'
     end
+  end
+
+  def add_to_log(recepient)
+    super('email.log', recepient)
   end
 end
 
 class Sms
   include Notification
-  def sms_message(recepient)
-    if recepient =~ /^\d{10}$/
-      send_message
+  include Send_message
+  def send_message(recepient)
+    if recepient =~ /^\d{10}/
+      super('Sms', recepient)
     else
-      raise ArgumentError, 'Invalid sms'
+      add_to_log(recepient)
+      raise ArgumentError, 'Invalid number'
+
     end
 end
+
+  def add_to_log(recepient)
+    super('sms.log', recepient)
+  end
 end
 
 p '*************************************************************'
 p 'enter phone number or mail'
 p '*************************************************************'
 recepient = gets.chomp
-if recepient =~ /^\d{10}$/
-  clas_email = Sms.new
-  type = 'sms'
+if recepient =~ /^[0-9]/
+  Sms.new.send_message(recepient)
 else
-  clas_email = Email.new
-  type = 'mail'
+  Email.new.send_message(recepient)
 end
-clas_email.send_message(type, recepient)
