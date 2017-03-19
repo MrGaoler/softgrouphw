@@ -1,6 +1,14 @@
-module Notification
-  def self.log(_path); end
+require 'highline/import'
 
+module Notification
+  def self.included(param)
+    param.extend(Impexp)
+ end
+  module Impexp
+    def log
+      p File.open("#{to_s.downcase}.log", 'r', &:read)
+    end
+  end
   def add_to_log(path, recepient)
     File.open(path, 'a+') { |file| file.write("\nInvalid data: #{recepient}") }
   end
@@ -53,4 +61,13 @@ if recepient =~ /^[0-9]/
   Sms.new.send_message(recepient)
 else
   Email.new.send_message(recepient)
+end
+p 'Do you want read log-files? (y/n)'
+if gets.chomp == 'y'
+  p '*************************************************************'
+  p 'SMS LOG'
+  Sms.log
+  p '*************************************************************'
+  p 'EMAIL LOG'
+  Email.log
 end
